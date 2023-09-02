@@ -38,4 +38,9 @@ export class AuthService {
     );
     return { token };
   }
+
+  checkToken(token: string){
+    const data = this.jwtService.verify(token)
+    return data;
+  }
 }

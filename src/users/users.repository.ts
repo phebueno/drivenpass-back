@@ -16,7 +16,11 @@ export class UsersRepository {
         password: bcrypt.hashSync(userDto.password, this.SALT),
       },
     });
-  }  
+  }
+
+  async getUserById(id: number) {
+    return await this.prisma.user.findUnique({ where: { id } });
+  }
 
   async getUserByEmail(email: string) {
     return await this.prisma.user.findUnique({ where: { email } });
