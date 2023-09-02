@@ -1,24 +1,54 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateCredentialDto } from './dto/create-credential.dto';
-import { UpdateCredentialDto } from './dto/update-credential.dto';
 import { User } from '@prisma/client';
+import { CredentialsRepository } from './credentials.repository';
+import Cryptr from 'cryptr';
 
 @Injectable()
 export class CredentialsService {
-  create(createCredentialDto: CreateCredentialDto, user: User) {
-    return `${user.email} creates a new credential`;
+
+  private SALT = 10;
+  private ITERATIONS = 10000;
+  private cryptr: Cryptr;
+
+  constructor(private readonly credentialsRepository: CredentialsRepository) {    
   }
 
-  findAll() {
-    return `This action returns all credentials`;
+  private getCryptrInstance(): Cryptr {
+    if (!this.cryptr) {
+      this.cryptr = new Cryptr(process.env.JWT_SECRET, {
+        pbkdf2Iterations: this.ITERATIONS,
+        saltLength: this.SALT,
+      });
+    }
+    return this.cryptr;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} credential`;
+  async create(credentialDto: CreateCredentialDto, user: User) {
+    const cryptr = this.getCryptrInstance();
+    const encryptedPass = cryptr.encrypt(credentialDto.password);
+    return await this.credentialsRepository.create(
+      { ...credentialDto, password: encryptedPass },
+      user,
+    );
   }
 
-  update(id: number, updateCredentialDto: UpdateCredentialDto) {
-    return `This action updates a #${id} credential`;
+  async findAll(user: User) {
+    const credentials = await this.credentialsRepository.findAll(user.id);
+
+    const cryptr = this.getCryptrInstance();
+    const decryptedCredentials = credentials.map(cred => { cred.password = cryptr.decrypt(cred.password)})
+    return credentials;
+  }
+
+  async findOne(id: number, user: User) {
+    const credential = await this.credentialsRepository.findOne(id);
+    if(!credential) throw new NotFoundException("Credential not found!");
+    if(credential.userId !== user.id) throw new UnauthorizedException("Not owner of credential!")
+    
+    const cryptr = this.getCryptrInstance();
+    const decryptedPass = cryptr.decrypt(credential.password);
+    return { ...credential, password: decryptedPass };
   }
 
   remove(id: number) {
