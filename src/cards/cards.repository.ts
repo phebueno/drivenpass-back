@@ -22,7 +22,7 @@ export class CardsRepository {
   }
 
   findOne(id: number) {
-    return this.prisma.card.findUnique({ where: { id } });
+    return this.prisma.card.findFirst({ where: { id } });
   }
 
   remove(id: number) {

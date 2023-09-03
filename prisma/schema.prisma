@@ -22,7 +22,7 @@ model User {
 }
 
 model Credential {
-  id Int @id @default(autoincrement())
+  id Int @default(autoincrement())
   user User @relation(fields: [userId], references:[id])
   userId Int
   title String
@@ -30,21 +30,23 @@ model Credential {
   username String
   password String
 
+  @@id([userId,title])
   @@map("credentials")
 }
 
 model Note {
-  id Int @id @default(autoincrement())
+  id Int @default(autoincrement())
   user User @relation(fields: [userId], references:[id])
   userId Int
   title String
   text String
 
+  @@id([userId,title])
   @@map("notes")
 }
 
 model Card {
-  id Int @id @default(autoincrement())
+  id Int @default(autoincrement())
   user User @relation(fields: [userId], references:[id])
   userId Int
   title String
@@ -56,6 +58,7 @@ model Card {
   isVirtual Boolean
   cardType CardType  
 
+  @@id([userId,title])
   @@map("cards")
 }
 

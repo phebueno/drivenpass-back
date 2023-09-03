@@ -18,7 +18,7 @@ export class CredentialsRepository {
   }
 
   findOne(id: number) {
-    return this.prisma.credential.findUnique({ where: { id } });
+    return this.prisma.credential.findFirst({ where: { id } });
   }
 
   remove(id: number) {

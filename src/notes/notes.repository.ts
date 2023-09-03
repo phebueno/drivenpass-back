@@ -18,7 +18,7 @@ export class NotesRepository {
   }
 
   findOne(id: number) {
-    return this.prisma.note.findUnique({ where: { id } });
+    return this.prisma.note.findFirst({ where: { id } });
   }
 
   remove(id: number) {
