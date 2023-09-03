@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { SignInDto } from '../auth/dto/signin.dto';
 
 @Injectable()
 export class UsersRepository {
@@ -24,5 +23,9 @@ export class UsersRepository {
 
   async getUserByEmail(email: string) {
     return await this.prisma.user.findUnique({ where: { email } });
+  }
+
+  async eraseUserAccount(id: number) {
+    return await this.prisma.user.delete({ where: { id } });
   }
 }
