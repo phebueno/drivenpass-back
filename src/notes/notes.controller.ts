@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { AuthGuard } from '../guards/auth.guard';
@@ -20,12 +20,12 @@ export class NotesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @User() user) {
+  findOne(@Param('id', ParseIntPipe) id: number, @User() user) {
     return this.notesService.findOne(+id, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @User() user) {
+  remove(@Param('id', ParseIntPipe) id: string, @User() user) {
     return this.notesService.remove(+id, user);
   }
 }

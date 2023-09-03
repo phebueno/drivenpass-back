@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { User } from '../decorators/user.decorator';
@@ -20,12 +20,12 @@ export class CardsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @User() user) {
+  findOne(@Param('id', ParseIntPipe) id: string, @User() user) {
     return this.cardsService.findOne(+id, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @User() user) {
+  remove(@Param('id', ParseIntPipe) id: string, @User() user) {
     return this.cardsService.remove(+id, user);
   }
 }
