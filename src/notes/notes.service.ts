@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { NotesRepository } from './notes.repository';
 import { User } from '@prisma/client';
@@ -20,7 +20,7 @@ export class NotesService {
   async findOne(id: number, user: User) {
     const note = await this.notesRepository.findOne(id);
     if(!note) throw new NotFoundException("Note not found!");
-    if(note.userId !== user.id) throw new UnauthorizedException("Not owner of note!")
+    if(note.userId !== user.id) throw new ForbiddenException("Not owner of note!")
     return note;
   }
 

@@ -1,7 +1,7 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateCredentialDto } from './dto/create-credential.dto';
 import { User } from '@prisma/client';
@@ -11,24 +11,10 @@ import { CryptrService } from '../utils/cryptr.service';
 
 @Injectable()
 export class CredentialsService {
-  private SALT = 10;
-  private ITERATIONS = 10000;
-  private cryptr: Cryptr;
-
   constructor(
     private readonly credentialsRepository: CredentialsRepository,
     private readonly cryptrService: CryptrService,
-  ) {}
-
-  private getCryptrInstance(): Cryptr {
-    if (!this.cryptr) {
-      this.cryptr = new Cryptr(process.env.JWT_SECRET, {
-        pbkdf2Iterations: this.ITERATIONS,
-        saltLength: this.SALT,
-      });
-    }
-    return this.cryptr;
-  }
+  ) {} 
 
   async create(credentialDto: CreateCredentialDto, user: User) {
     const cryptr = this.cryptrService.getCryptrInstance();
@@ -53,9 +39,9 @@ export class CredentialsService {
     const credential = await this.credentialsRepository.findOne(id);
     if (!credential) throw new NotFoundException('Credential not found!');
     if (credential.userId !== user.id)
-      throw new UnauthorizedException('Not owner of credential!');
+      throw new ForbiddenException('Not owner of credential!');
 
-    const cryptr = this.getCryptrInstance();
+    const cryptr = this.cryptrService.getCryptrInstance();
     const decryptedPass = cryptr.decrypt(credential.password);
     return { ...credential, password: decryptedPass };
   }

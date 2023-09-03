@@ -18,11 +18,11 @@ export class CardsRepository {
   }
 
   findAll(userId: number) {
-    return `This action returns all cards`;
+    return this.prisma.card.findMany({ where: { userId } });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} card`;
+    return this.prisma.card.findUnique({ where: { id } });
   }
 
   remove(id: number) {
