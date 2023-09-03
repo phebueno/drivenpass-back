@@ -21,8 +21,11 @@ export class CredentialsService {
       credentialDto.title,
       user.id,
     );
-    if(existingCredential) throw new ConflictException("You already created a credential with this title!")
-    
+    if (existingCredential)
+      throw new ConflictException(
+        'You already created a credential with this title!',
+      );
+
     const cryptr = this.cryptrService.getCryptrInstance();
     const encryptedPass = cryptr.encrypt(credentialDto.password);
     return await this.credentialsRepository.create(
@@ -42,17 +45,22 @@ export class CredentialsService {
   }
 
   async findOne(id: number, user: User) {
-    const credential = await this.credentialsRepository.findOne(id);
-    if (!credential) throw new NotFoundException('Credential not found!');
-    if (credential.userId !== user.id)
-      throw new ForbiddenException('Not owner of credential!');
-
+    const credential = await this.credentialStatus(id, user);
     const cryptr = this.cryptrService.getCryptrInstance();
     const decryptedPass = cryptr.decrypt(credential.password);
     return { ...credential, password: decryptedPass };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} credential`;
+  async remove(id: number, user: User) {
+    const credential = await this.credentialStatus(id, user);
+    return this.credentialsRepository.remove(credential.title, user.id);
+  }
+
+  private async credentialStatus(id: number, user: User) {
+    const credential = await this.credentialsRepository.findOne(id);
+    if (!credential) throw new NotFoundException('Credential not found!');
+    if (credential.userId !== user.id)
+      throw new ForbiddenException('Not owner of credential!');
+    return credential;
   }
 }

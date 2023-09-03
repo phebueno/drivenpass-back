@@ -23,13 +23,19 @@ export class NotesService {
   }
 
   async findOne(id: number, user: User) {
+    const note = await this.noteStatus(id, user);
+    return note;
+  }
+
+  async remove(id: number, user: User) {
+    const note = await this.noteStatus(id, user);
+    return this.notesRepository.remove(note.title, user.id);
+  }
+
+  private async noteStatus(id: number, user: User){
     const note = await this.notesRepository.findOne(id);
     if(!note) throw new NotFoundException("Note not found!");
     if(note.userId !== user.id) throw new ForbiddenException("Not owner of note!")
     return note;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} note`;
   }
 }

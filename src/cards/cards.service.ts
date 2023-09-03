@@ -38,9 +38,7 @@ export class CardsService {
   }
 
   async findOne(id: number, user: User) {
-    const card = await this.cardsRepository.findOne(id)
-    if(!card) throw new NotFoundException("Card not found!")
-    if(card.userId!==user.id) throw new ForbiddenException("Not card owner!");
+    const card = await this.cardStatus(id, user);
 
     const cryptr = this.cryptrService.getCryptrInstance();
     const decryptedPass = cryptr.decrypt(card.password);
@@ -48,7 +46,15 @@ export class CardsService {
     return { ...card, password: decryptedPass, cvv: decryptedCVV };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} card`;
+  async remove(id: number, user: User) {
+    const card = await this.cardStatus(id, user);
+    return this.cardsRepository.remove(card.title, user.id);
+  }
+
+  private async cardStatus(id: number, user: User) {
+    const card = await this.cardsRepository.findOne(id)
+    if(!card) throw new NotFoundException("Card not found!")
+    if(card.userId!==user.id) throw new ForbiddenException("Not card owner!");
+    return card;
   }
 }

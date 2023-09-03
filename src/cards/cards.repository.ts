@@ -25,8 +25,10 @@ export class CardsRepository {
     return this.prisma.card.findFirst({ where: { id } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} card`;
+  remove(title: string, userId: number) {
+    return this.prisma.card.delete({
+      where: { userId_title: { title, userId } },
+    });
   }
 
   findByTitle(title: string, userId: number) {

@@ -26,7 +26,7 @@ export class CredentialsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.credentialsService.remove(+id);
+  remove(@Param('id') id: string, @User() user) {
+    return this.credentialsService.remove(+id, user);
   }
 }
