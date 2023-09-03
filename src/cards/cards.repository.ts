@@ -28,4 +28,10 @@ export class CardsRepository {
   remove(id: number) {
     return `This action removes a #${id} card`;
   }
+
+  findByTitle(title: string, userId: number) {
+    return this.prisma.card.findUnique({
+      where: { userId_title: { title, userId } },
+    });
+  }
 }

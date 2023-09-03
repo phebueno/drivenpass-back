@@ -24,4 +24,10 @@ export class NotesRepository {
   remove(id: number) {
     return `This action removes a #${id} note`;
   }
+
+  findByTitle(title: string, userId: number) {
+    return this.prisma.note.findUnique({
+      where: { userId_title: { title, userId } },
+    });
+  }
 }

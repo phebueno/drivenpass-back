@@ -24,4 +24,10 @@ export class CredentialsRepository {
   remove(id: number) {
     return `This action removes a #${id} credential`;
   }
+
+  findByTitle(title: string, userId: number) {
+    return this.prisma.credential.findUnique({
+      where: { userId_title: { title, userId } },
+    });
+  }
 }

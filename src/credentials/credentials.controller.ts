@@ -4,6 +4,7 @@ import { CreateCredentialDto } from './dto/create-credential.dto';
 import { AuthGuard } from '../guards/auth.guard';
 import { User } from '../decorators/user.decorator';
 
+
 @Controller('credentials')
 @UseGuards(AuthGuard) //define para todas as rotas
 export class CredentialsController {

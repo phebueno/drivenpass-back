@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { NotesRepository } from './notes.repository';
 import { User } from '@prisma/client';
@@ -9,7 +9,12 @@ export class NotesService {
   constructor(private readonly notesRepository: NotesRepository) {}
 
   async create(createNoteDto: CreateNoteDto, user: User) {
-    //verify if its user unique
+    const existingNote = await this.notesRepository.findByTitle(
+      createNoteDto.title,
+      user.id,
+    );
+    if(existingNote) throw new ConflictException("You already created a note with this title!")
+    
     return await this.notesRepository.create(createNoteDto, user);
   }
 

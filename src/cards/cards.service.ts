@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCardDto } from './dto/create-card.dto';
 import { CardsRepository } from './cards.repository';
 import { User } from '@prisma/client';
@@ -12,6 +12,12 @@ export class CardsService {
   ) {}
 
   async create(cardDto: CreateCardDto, user: User) {
+    const existingCard = await this.cardsRepository.findByTitle(
+      cardDto.title,
+      user.id,
+    );
+    if(existingCard) throw new ConflictException("You already created a card with this title!")
+    
     const cryptr = this.cryptrService.getCryptrInstance();
     const encryptedPass = cryptr.encrypt(cardDto.password);
     const encryptedCVV = cryptr.encrypt(cardDto.cvv.toString());

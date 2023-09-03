@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -6,7 +7,6 @@ import {
 import { CreateCredentialDto } from './dto/create-credential.dto';
 import { User } from '@prisma/client';
 import { CredentialsRepository } from './credentials.repository';
-import Cryptr from 'cryptr';
 import { CryptrService } from '../utils/cryptr.service';
 
 @Injectable()
@@ -14,9 +14,15 @@ export class CredentialsService {
   constructor(
     private readonly credentialsRepository: CredentialsRepository,
     private readonly cryptrService: CryptrService,
-  ) {} 
+  ) {}
 
   async create(credentialDto: CreateCredentialDto, user: User) {
+    const existingCredential = await this.credentialsRepository.findByTitle(
+      credentialDto.title,
+      user.id,
+    );
+    if(existingCredential) throw new ConflictException("You already created a credential with this title!")
+    
     const cryptr = this.cryptrService.getCryptrInstance();
     const encryptedPass = cryptr.encrypt(credentialDto.password);
     return await this.credentialsRepository.create(
