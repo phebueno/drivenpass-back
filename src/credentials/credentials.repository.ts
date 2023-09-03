@@ -13,8 +13,8 @@ export class CredentialsRepository {
     });
   }
 
-  findAll(id: number) {
-    return this.prisma.credential.findMany({ where: { userId: id } });
+  findAll(userId: number) {
+    return this.prisma.credential.findMany({ where: { userId } });
   }
 
   findOne(id: number) {

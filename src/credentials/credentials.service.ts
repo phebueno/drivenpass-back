@@ -37,7 +37,7 @@ export class CredentialsService {
     const credentials = await this.credentialsRepository.findAll(user.id);
 
     const cryptr = this.getCryptrInstance();
-    const decryptedCredentials = credentials.map(cred => { cred.password = cryptr.decrypt(cred.password)})
+    credentials.map(cred => { cred.password = cryptr.decrypt(cred.password)})
     return credentials;
   }
 
