@@ -16,7 +16,7 @@ Foi feita uma documentação completa das rotas com Swagger que pode ser acessad
 
 ## Tecnologias
 Foram utilizadas as seguintes ferramentas para a construção deste app:<br>
-<p>
+
  ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
  ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
  ![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
@@ -24,7 +24,7 @@ Foram utilizadas as seguintes ferramentas para a construção deste app:<br>
  ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
  ![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
  ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
-</p>
+
 
 O aplicativo foi construído a partir do framework NESTJS:
 
