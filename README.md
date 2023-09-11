@@ -1,3 +1,33 @@
+# DrivenPass
+Uma API desenvolvida para uma aplicação de armazenamento de informações do usuário, como credenciais, senhas e notas.
+
+O serviço está com deploy ativo no link: https://drivenpass-api-gdi6.onrender.com/
+
+## Sobre
+
+Este é um serviço API para uma futura aplicação que tem como objetivo armazenar informações seguras de um usuário. Todas os dados sensíveis são criptografados de formas diferentes, de modo que apenas o usuário tenha acesso a elas. Nesse serviço, um usuário tem as opções de:
+
+- Sign Up
+- Login
+- Adição, consulta e deleção de credenciais, senhas de websites e anotações.
+- Deleção da conta do usuário, junto de todas as informações armazenadas.
+
+Foi feita uma documentação completa das rotas com Swagger que pode ser acessada do seguinte link: https://drivenpass-api-gdi6.onrender.com/api
+
+## Tecnologias
+Foram utilizadas as seguintes ferramentas para a construção deste app:<br>
+<p>
+ ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
+ ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+ ![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
+ ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+ ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+ ![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
+ ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
+</p>
+
+O aplicativo foi construído a partir do framework NESTJS:
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
